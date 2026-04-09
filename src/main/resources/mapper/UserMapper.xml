@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ite.kjgl0001.mapper.UserMapper">
+
+    <resultMap id="userResultMap" type="com.ite.kjgl0001.pojo.User">
+        <id property="userId" column="userId"/>
+        <result property="userName" column="userName"/>
+        <result property="userPassword" column="userPassword"/>
+        <result property="userSex" column="userSex"/>
+        <result property="userAge" column="userAge"/>
+        <result property="userPhone" column="userPhone"/>
+        <result property="userAddress" column="userAddress"/>
+        <result property="userType" column="userType"/>
+        <result property="birthday" column="birthday"/>
+        <result property="createTime" column="createTime"/>
+    </resultMap>
+
+    <select id="findByUserId" resultMap="userResultMap">
+        SELECT * FROM t_user WHERE userId = #{userId}
+    </select>
+
+    <select id="login" resultMap="userResultMap">
+        SELECT * FROM t_user WHERE userId = #{userId} AND userPassword = #{userPassword}
+    </select>
+
+    <select id="findList" resultMap="userResultMap">
+        SELECT * FROM t_user
+        <where>
+            <if test="userName != null and userName != ''">
+                AND userName LIKE CONCAT('%', #{userName}, '%')
+            </if>
+            <if test="userType != null and userType != ''">
+                AND userType = #{userType}
+            </if>
+            <if test="userPhone != null and userPhone != ''">
+                AND userPhone LIKE CONCAT('%', #{userPhone}, '%')
+            </if>
+        </where>
+        ORDER BY createTime DESC
+        LIMIT #{start}, #{pageSize}
+    </select>
+
+    <select id="count" resultType="long">
+        SELECT COUNT(*) FROM t_user
+        <where>
+            <if test="userName != null and userName != ''">
+                AND userName LIKE CONCAT('%', #{userName}, '%')
+            </if>
+            <if test="userType != null and userType != ''">
+                AND userType = #{userType}
+            </if>
+            <if test="userPhone != null and userPhone != ''">
+                AND userPhone LIKE CONCAT('%', #{userPhone}, '%')
+            </if>
+        </where>
+    </select>
+
+    <insert id="insert" parameterType="com.ite.kjgl0001.pojo.User">
+        INSERT INTO t_user (userId, userName, userPassword, userSex, userAge, userPhone, userAddress, userType, birthday, createTime)
+        VALUES (#{userId}, #{userName}, #{userPassword}, #{userSex}, #{userAge}, #{userPhone}, #{userAddress}, #{userType}, #{birthday}, #{createTime})
+    </insert>
+
+    <update id="update" parameterType="com.ite.kjgl0001.pojo.User">
+        UPDATE t_user
+        <set>
+            <if test="userName != null">userName = #{userName},</if>
+            <if test="userPassword != null">userPassword = #{userPassword},</if>
+            <if test="userSex != null">userSex = #{userSex},</if>
+            <if test="userAge != null">userAge = #{userAge},</if>
+            <if test="userPhone != null">userPhone = #{userPhone},</if>
+            <if test="userAddress != null">userAddress = #{userAddress},</if>
+            <if test="userType != null">userType = #{userType},</if>
+            <if test="birthday != null">birthday = #{birthday},</if>
+        </set>
+        WHERE userId = #{userId}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM t_user WHERE userId = #{userId}
+    </delete>
+
+</mapper>

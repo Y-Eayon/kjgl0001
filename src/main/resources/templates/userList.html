@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>xxx课件管理系统</title>
+    <link rel="stylesheet" href="/css/public.css"/>
+    <link rel="stylesheet" href="/css/style.css"/>
+</head>
+<body>
+<!--头部-->
+    <header class="publicHeader">
+        <h1>xxx课件管理系统</h1>
+        <div class="publicHeaderR">
+            <p><span>下午好！</span><span style="color: #fff21b" th:text="${session.loginUser != null ? session.loginUser.userName : 'Admin'}">Admin</span> , 欢迎你！</p>
+            <a href="/login.html">退出</a>
+        </div>
+    </header>
+<!--时间-->
+    <section class="publicTime">
+        <span id="time">2015年1月1日 11:11  星期一</span>
+        <a href="#">温馨提示：为了能正常浏览，请使用高版本浏览器！（IE10+）</a>
+    </section>
+<!--主体内容-->
+    <section class="publicMian ">
+        <div class="left">
+            <h2 class="leftH2"><span class="span1"></span>功能列表 <span></span></h2>
+            <nav>
+                <ul class="list">
+                <li ><a href="/subjectList.html">科目管理</a></li>
+                <li><a href="/studyList.html">课件管理</a></li>
+                <li><a href="/userList.html">用户管理</a></li>
+                <li><a href="/password.html">密码修改</a></li>
+                <li><a href="/login.html">退出系统</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="right">
+            <div class="location">
+                <strong>你现在所在的位置是:</strong>
+                <span>用户管理页面</span>
+            </div>
+            <div class="search">
+                <form id="searchForm" action="/userList.html" method="get">
+                    <span>用户名：</span>
+                    <input type="text" placeholder="请输入用户名" name="username" th:value="${username}"/>
+
+                    <span style="margin-left: 20px;">用户类型：</span>
+                    <select name="userType">
+                        <option value="">全部</option>
+                        <option value="0" th:selected="${userType == '0'}">学员</option>
+                        <option value="1" th:selected="${userType == '1'}">老师</option>
+                        <option value="2" th:selected="${userType == '2'}">管理员</option>
+                    </select>
+
+                    <span style="margin-left: 20px;">手机号：</span>
+                    <input type="text" placeholder="请输入手机号" name="userPhone" th:value="${userPhone}"/>
+
+                    <input type="submit" value="查询"/>
+                    <input type="button" value="重置" onclick="resetSearch()"/>
+                </form>
+                <a href="/userAdd.html" style="margin-left: 10px;">添加用户</a>
+            </div>
+
+            <!--用户-->
+            <table class="providerTable" cellpadding="0" cellspacing="0">
+                <tr class="firstTr">
+                    <th width="10%">用户账号</th>
+                    <th width="20%">真实姓名</th>
+                    <th width="10%">性别</th>
+                    <th width="10%">年龄</th>
+                    <th width="10%">电话</th>
+                    <th width="10%">用户类型</th>
+                    <th width="30%">操作</th>
+                </tr>
+                <tr th:each="user : ${userList}">
+                    <td th:text="${user.userId}"></td>
+                    <td th:text="${user.userName}"></td>
+                    <td th:text="${user.userSex}"></td>
+                    <td th:text="${user.userAge}"></td>
+                    <td th:text="${user.userPhone}"></td>
+                    <td>
+                        <span th:if="${user.userType == '0'}">学员</span>
+                        <span th:if="${user.userType == '1'}">老师</span>
+                        <span th:if="${user.userType == '2'}">管理员</span>
+                        <span th:if="${user.userType == null or user.userType == ''}">未设置</span>
+                    </td>
+                    <td>
+                        <a th:href="@{/userView.html(userId=${user.userId})}"><img src="/img/read.png" alt="查看" title="查看"/></a>
+                        <a th:href="@{/userUpdate.html(userId=${user.userId})}"><img src="/img/xiugai.png" alt="修改" title="修改"/></a>
+                        <a href="javascript:void(0)" class="delete-btn" th:data-userid="${user.userId}"><img src="/img/schu.png" alt="删除" title="删除"/></a>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="7">
+                        当前第<span th:text="${pageUtil.currentPage}">1</span>页，共<span th:text="${pageUtil.totalSize}">0</span>条数据&nbsp;&nbsp;&nbsp;&nbsp;共<span th:text="${pageUtil.totalPage}">1</span>页
+                        <a th:href="@{/userList.html(pageNum=1, username=${username})}">首页</a>
+                        <a th:href="@{/userList.html(pageNum=${pageUtil.totalPage > 0 ? pageUtil.totalPage : 1}, username=${username})}">尾页</a>
+                        <a th:href="@{/userList.html(pageNum=${pageUtil.currentPage > 1 ? pageUtil.currentPage - 1 : 1}, username=${username})}">上一页</a>
+                        <a th:if="${pageUtil.currentPage < pageUtil.totalPage}" th:href="@{/userList.html(pageNum=${pageUtil.currentPage + 1}, username=${username})}">下一页</a>
+                        <span th:if="${pageUtil.currentPage >= pageUtil.totalPage}">下一页</span>
+                    </td>
+                </tr>
+
+
+            </table>
+
+        </div>
+    </section>
+
+<!--点击删除按钮后弹出的页面-->
+<div class="zhezhao"></div>
+<div class="remove" id="removeUse">
+    <div class="removerChid">
+        <h2>提示</h2>
+        <div class="removeMain">
+            <p>你确定要删除该用户吗？</p>
+            <a href="#" id="yes">确定</a>
+            <a href="#" id="no">取消</a>
+        </div>
+    </div>
+</div>
+
+    <footer class="footer">
+    </footer>
+
+<script src="/js/jquery.js"></script>
+<script src="/js/js.js"></script>
+<script src="/js/time.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.delete-btn').click(function() {
+            var userId = $(this).data('userid');
+            if (confirm('确定要删除该用户吗？')) {
+                var form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/user/delete';
+
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'userId';
+                input.value = userId;
+                form.appendChild(input);
+
+                document.body.appendChild(form);
+                form.submit();
+            }
+        });
+    });
+
+    function doSearch() {
+        var username = document.querySelector('input[name="username"]').value;
+        window.location.href = '/userList.html?username=' + encodeURIComponent(username);
+    }
+
+    function resetSearch() {
+        document.getElementById('searchForm').reset();
+        window.location.href = '/userList.html';
+    }
+</script>
+
+
+</body>
+</html>
