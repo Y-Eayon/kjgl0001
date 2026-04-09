@@ -31,6 +31,7 @@ public class UserController {
                           @RequestParam(value = "username", required = false) String username,
                           @RequestParam(value = "userType", required = false) String userType,
                           @RequestParam(value = "userPhone", required = false) String userPhone,
+                          @RequestParam(value = "userSex", required = false) String userSex,
                           Model model,
                           HttpSession session) {
         
@@ -45,9 +46,9 @@ public class UserController {
         
         System.out.println("====== 开始查询用户列表 ======");
         System.out.println("pageNum: " + pageNum + ", pageSize: " + pageSize);
-        System.out.println("username: " + username + ", userType: " + userType + ", userPhone: " + userPhone);
+        System.out.println("username: " + username + ", userType: " + userType + ", userPhone: " + userPhone + ", userSex: " + userSex);
         
-        List<User> userList = userService.findUserList(username, userType, userPhone, pageUtil);
+        List<User> userList = userService.findUserList(username, userType, userPhone, userSex, pageUtil);
         
         System.out.println("查询到的用户数量: " + (userList != null ? userList.size() : 0));
         System.out.println("总数据量: " + pageUtil.getTotalSize());
@@ -59,6 +60,7 @@ public class UserController {
         model.addAttribute("username", username);
         model.addAttribute("userType", userType);
         model.addAttribute("userPhone", userPhone);
+        model.addAttribute("userSex", userSex);
         return "userList.html";
     }
 

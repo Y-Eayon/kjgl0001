@@ -9,7 +9,7 @@ public interface UserService {
     
     User login(String userId, String password);
     
-    List<User> findUserList(String userName, String userType, String userPhone, PageUtil pageUtil);
+    List<User> findUserList(String userName, String userType, String userPhone, String userSex, PageUtil pageUtil);
     
     boolean addUser(User user);
     

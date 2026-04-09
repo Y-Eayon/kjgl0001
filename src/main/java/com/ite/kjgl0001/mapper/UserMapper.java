@@ -25,6 +25,7 @@ public interface UserMapper {
     List<User> findList(@Param("userName") String userName, 
                        @Param("userType") String userType,
                        @Param("userPhone") String userPhone,
+                       @Param("userSex") String userSex,
                        @Param("start") int start, 
                        @Param("pageSize") int pageSize);
     
@@ -33,7 +34,8 @@ public interface UserMapper {
      */
     long count(@Param("userName") String userName,
                @Param("userType") String userType,
-               @Param("userPhone") String userPhone);
+               @Param("userPhone") String userPhone,
+               @Param("userSex") String userSex);
 
     /**
      * 添加用户

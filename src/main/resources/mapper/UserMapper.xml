@@ -37,6 +37,9 @@
             <if test="userPhone != null and userPhone != ''">
                 AND userPhone LIKE CONCAT('%', #{userPhone}, '%')
             </if>
+            <if test="userSex != null and userSex != ''">
+                AND userSex = #{userSex}
+            </if>
         </where>
         ORDER BY createTime DESC
         LIMIT #{start}, #{pageSize}
@@ -53,6 +56,9 @@
             </if>
             <if test="userPhone != null and userPhone != ''">
                 AND userPhone LIKE CONCAT('%', #{userPhone}, '%')
+            </if>
+            <if test="userSex != null and userSex != ''">
+                AND userSex = #{userSex}
             </if>
         </where>
     </select>

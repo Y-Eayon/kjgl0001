@@ -36,22 +36,23 @@ public class UserServiceImpl implements UserService {
     }
     
     @Override
-    public List<User> findUserList(String userName, String userType, String userPhone, PageUtil pageUtil) {
+    public List<User> findUserList(String userName, String userType, String userPhone, String userSex, PageUtil pageUtil) {
         System.out.println("====== Service: findUserList ======");
         System.out.println("userName: " + userName);
         System.out.println("userType: " + userType);
         System.out.println("userPhone: " + userPhone);
+        System.out.println("userSex: " + userSex);
         System.out.println("currentPage: " + pageUtil.getCurrentPage());
         System.out.println("pageSize: " + pageUtil.getPageSize());
         
-        int totalSize = (int) userMapper.count(userName, userType, userPhone);
+        int totalSize = (int) userMapper.count(userName, userType, userPhone, userSex);
         System.out.println("查询到的总数据量: " + totalSize);
         pageUtil.setTotalSize(totalSize);
         
         int start = (pageUtil.getCurrentPage() - 1) * pageUtil.getPageSize();
         System.out.println("计算 start: " + start);
         
-        List<User> list = userMapper.findList(userName, userType, userPhone, start, pageUtil.getPageSize());
+        List<User> list = userMapper.findList(userName, userType, userPhone, userSex, start, pageUtil.getPageSize());
         System.out.println("查询到的数据条数: " + (list != null ? list.size() : 0));
         
         for (User user : list) {
