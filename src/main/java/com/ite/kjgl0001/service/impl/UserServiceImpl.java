@@ -3,6 +3,7 @@ package com.ite.kjgl0001.service.impl;
 import com.ite.kjgl0001.mapper.UserMapper;
 import com.ite.kjgl0001.pojo.User;
 import com.ite.kjgl0001.service.UserService;
+import com.ite.kjgl0001.util.AgeUtil;
 import com.ite.kjgl0001.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,6 +53,13 @@ public class UserServiceImpl implements UserService {
         
         List<User> list = userMapper.findList(userName, userType, userPhone, start, pageUtil.getPageSize());
         System.out.println("查询到的数据条数: " + (list != null ? list.size() : 0));
+        
+        for (User user : list) {
+            if (user.getBirthday() != null && !user.getBirthday().trim().isEmpty()) {
+                user.setUserAge(AgeUtil.calculateAge(user.getBirthday()));
+            }
+        }
+        
         System.out.println("===============================");
         
         return list;
@@ -92,7 +100,11 @@ public class UserServiceImpl implements UserService {
     
     @Override
     public User findUserById(String userId) {
-        return userMapper.findByUserId(userId);
+        User user = userMapper.findByUserId(userId);
+        if (user != null && user.getBirthday() != null && !user.getBirthday().trim().isEmpty()) {
+            user.setUserAge(AgeUtil.calculateAge(user.getBirthday()));
+        }
+        return user;
     }
     
     @Override
