@@ -14,8 +14,7 @@ function InitContainerPanel() //初始化容器
     div.style.display ="none";  
     document.body.appendChild(div);  
 }//调用calendar.show(dateControl, popControl);  
-//--> 
-<!--
+//
 var cal;
 var isFocus=false; //是否为焦点
 var pickMode ={
