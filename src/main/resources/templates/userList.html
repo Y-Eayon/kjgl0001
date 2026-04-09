@@ -75,7 +75,11 @@
                 <tr th:each="user : ${userList}">
                     <td th:text="${user.userId}"></td>
                     <td th:text="${user.userName}"></td>
-                    <td th:text="${user.userSex}"></td>
+                    <td>
+                        <span th:if="${user.userSex == '1'}">男</span>
+                        <span th:if="${user.userSex == '0'}">女</span>
+                        <span th:if="${user.userSex == null or user.userSex == ''}">未设置</span>
+                    </td>
                     <td th:text="${user.userAge}"></td>
                     <td th:text="${user.userPhone}"></td>
                     <td>

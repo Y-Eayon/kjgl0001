@@ -43,7 +43,11 @@
         <div class="providerView">
             <p><strong>用户账号：</strong><span th:text="${user.userId}"></span></p>
             <p><strong>真实姓名：</strong><span th:text="${user.userName}"></span></p>
-            <p><strong>用户性别：</strong><span th:text="${user.userSex}"></span></p>
+            <p><strong>用户性别：</strong>
+                <span th:if="${user.userSex == '1'}">男</span>
+                <span th:if="${user.userSex == '0'}">女</span>
+                <span th:if="${user.userSex == null or user.userSex == ''}">未设置</span>
+            </p>
             <p><strong>出生日期：</strong><span th:text="${user.birthday}"></span></p>
             <p><strong>用户电话：</strong><span th:text="${user.userPhone}"></span></p>
             <p><strong>用户地址：</strong><span th:text="${user.userAddress}"></span></p>
