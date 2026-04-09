@@ -3,6 +3,7 @@ package com.ite.kjgl0001.controller;
 import com.ite.kjgl0001.pojo.User;
 import com.ite.kjgl0001.service.UserService;
 import com.ite.kjgl0001.util.PageUtil;
+import com.ite.kjgl0001.util.PermissionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -87,18 +88,16 @@ public class UserController {
 
     @GetMapping("/userAdd.html")
     public String addUserPage(HttpSession session) {
-        Object loginUser = session.getAttribute("loginUser");
-        if (loginUser == null) {
-            return "redirect:/login.html";
+        if (!PermissionUtil.isAdmin(session)) {
+            return "redirect:/index.html?error=没有权限访问";
         }
         return "userAdd.html";
     }
 
     @PostMapping("/user/add")
     public String addUser(User user, HttpSession session) {
-        Object loginUser = session.getAttribute("loginUser");
-        if (loginUser == null) {
-            return "redirect:/login.html";
+        if (!PermissionUtil.isAdmin(session)) {
+            return "redirect:/index.html?error=没有权限执行此操作";
         }
 
         System.out.println("====== 添加用户 ======");
@@ -133,9 +132,8 @@ public class UserController {
 
     @GetMapping("/userUpdate.html")
     public String updateUserPage(@RequestParam("userId") String userId, Model model, HttpSession session) {
-        Object loginUser = session.getAttribute("loginUser");
-        if (loginUser == null) {
-            return "redirect:/login.html";
+        if (!PermissionUtil.isAdmin(session)) {
+            return "redirect:/index.html?error=没有权限访问";
         }
 
         User user = userService.findUserById(userId);
@@ -154,9 +152,8 @@ public class UserController {
 
     @PostMapping("/user/update")
     public String updateUser(User user, HttpSession session) {
-        Object loginUser = session.getAttribute("loginUser");
-        if (loginUser == null) {
-            return "redirect:/login.html";
+        if (!PermissionUtil.isAdmin(session)) {
+            return "redirect:/index.html?error=没有权限执行此操作";
         }
 
         System.out.println("====== 更新用户信息 ======");
@@ -178,9 +175,8 @@ public class UserController {
 
     @PostMapping("/user/delete")
     public String deleteUser(@RequestParam("userId") String userId, HttpSession session) {
-        Object loginUser = session.getAttribute("loginUser");
-        if (loginUser == null) {
-            return "redirect:/login.html";
+        if (!PermissionUtil.isAdmin(session)) {
+            return "redirect:/index.html?error=没有权限执行此操作";
         }
 
         boolean success = userService.deleteUser(userId);

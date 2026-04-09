@@ -53,6 +53,15 @@ public class IndexController {
         }
     }
 
+    @GetMapping("/index.html")
+    public String index(HttpSession session) {
+        Object loginUser = session.getAttribute("loginUser");
+        if (loginUser == null) {
+            return "redirect:/login.html";
+        }
+        return "index.html";
+    }
+
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();

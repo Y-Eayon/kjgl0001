@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head lang="en">
     <meta charset="UTF-8">
     <title>xxx课件管理系统</title>
@@ -11,8 +11,8 @@
     <header class="publicHeader">
         <h1>xxx课件管理系统</h1>
         <div class="publicHeaderR">
-            <p><span>下午好！</span><span style="color: #fff21b"> Admin</span> , 欢迎你！</p>
-            <a href="/login.html">退出</a>
+            <p><span>下午好！</span><span style="color: #fff21b" th:text="${session.loginUser != null ? session.loginUser.userName : 'Admin'}"> Admin</span> , 欢迎你！</p>
+            <a href="/logout">退出</a>
         </div>
     </header>
 <!--时间-->
@@ -30,7 +30,7 @@
                    <li><a href="/studyList.html">课件管理</a></li>
                    <li><a href="/userList.html">用户管理</a></li>
                    <li><a href="/password.html">密码修改</a></li>
-                   <li><a href="/login.html">退出系统</a></li>
+                   <li><a href="/logout">退出系统</a></li>
                 </ul>
             </nav>
         </div>
@@ -43,7 +43,7 @@
                 <span>科目名：</span>
                 <input type="text" placeholder="请输入用户名"/>
                 <input type="button" value="查询"/>
-                <a href="/subjectAdd.html">添加科目</a>
+                <a href="/subjectAdd.html" th:if="${session.loginUser != null and session.loginUser.userType == '2'}">添加科目</a>
             </div>
             <!--用户-->
             <table class="providerTable" cellpadding="0" cellspacing="0">
@@ -60,8 +60,7 @@
                     <td>admin</td>
 					 <td>正常</td>
                     <td>
-                                     
-                        <a href="#" class="removeUser"><img src="/img/schu.png" alt="禁用" title="禁用"/></a>
+                        <a th:if="${session.loginUser != null and session.loginUser.userType == '2'}" href="#" class="removeUser"><img src="/img/schu.png" alt="禁用" title="禁用"/></a>
                     </td>
                 </tr>
 				 <tr>
@@ -70,7 +69,7 @@
                     <td>admin</td>
 					 <td>正常</td>
                     <td>
-                       <a href="#" class="removeUser"><img src="/img/schu.png" alt="禁用" title="禁用"/>
+                       <a th:if="${session.loginUser != null and session.loginUser.userType == '2'}" href="#" class="removeUser"><img src="/img/schu.png" alt="禁用" title="禁用"/>
                        </a>
                     </td>
                 </tr>
@@ -80,9 +79,7 @@
                     <td>admin</td>
 					 <td>禁用</td>
                     <td>
-                       
-                        <a href="/userUpdate.html"><img src="/img/xiugai.png" alt="启用" title="启用"/></a>
-                       
+                        <a th:if="${session.loginUser != null and session.loginUser.userType == '2'}" href="/userUpdate.html"><img src="/img/xiugai.png" alt="启用" title="启用"/></a>
                     </td>
                 </tr>
                  <tr>
