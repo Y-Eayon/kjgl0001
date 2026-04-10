@@ -41,27 +41,30 @@
             <span>用户管理页面 >> 用户添加页面</span>
         </div>
         <div class="providerAdd">
+            <div th:if="${param.error}" style="color: red; padding: 10px; margin-bottom: 10px; border: 1px solid red; background-color: #ffe6e6;">
+                <p th:text="${param.error[0]}"></p>
+            </div>
             <form id="addUserForm" action="/user/add" method="post">
                 <!--div的class 为error是验证错误，ok是验证成功-->
                 <div>
                     <label for="userId">用户账号：</label>
                     <input type="text" name="userId" id="userId" required/>
-                    <span class="error-msg" id="userIdMsg">*请输入用户账号，且不能重复</span>
+                    <span class="error-msg" id="userIdMsg" data-default="*请输入用户账号，且不能重复">*请输入用户账号，且不能重复</span>
                 </div>
                 <div>
                     <label for="userName">真实姓名：</label>
                     <input type="text" name="userName" id="userName" required/>
-                    <span class="error-msg" id="userNameMsg">*请输入真实姓名</span>
+                    <span class="error-msg" id="userNameMsg" data-default="*请输入真实姓名">*请输入真实姓名</span>
                 </div>
                 <div>
                     <label for="userPassword">用户密码：</label>
                     <input type="password" name="userPassword" id="userPassword" required/>
-                    <span class="error-msg" id="passwordMsg">*密码长度必须大于6位小于20位</span>
+                    <span class="error-msg" id="passwordMsg" data-default="*密码长度必须大于6位小于20位">*密码长度必须大于6位小于20位</span>
                 </div>
                 <div>
                     <label for="confirmPassword">确认密码：</label>
                     <input type="password" name="confirmPassword" id="confirmPassword" required/>
-                    <span class="error-msg" id="confirmMsg">*请输入确认密码</span>
+                    <span class="error-msg" id="confirmMsg" data-default="*请输入确认密码">*请输入确认密码</span>
                 </div>
                 <div>
                     <label>用户性别：</label>
@@ -73,12 +76,12 @@
                 <div>
                     <label for="birthday">出生日期：</label>
                     <input type="date" name="birthday" id="birthday" required/>
-                    <span class="error-msg" id="birthdayMsg">*</span>
+                    <span class="error-msg" id="birthdayMsg" data-default="*">*</span>
                 </div>
                 <div>
                     <label for="userPhone">用户电话：</label>
                     <input type="text" name="userPhone" id="userPhone" required/>
-                    <span class="error-msg" id="phoneMsg">*</span>
+                    <span class="error-msg" id="phoneMsg" data-default="*">*</span>
                 </div>
                 <div>
                     <label for="userAddress">用户地址：</label>
@@ -181,6 +184,15 @@
         });
     }
 
+    // 页面加载时检查是否有错误参数
+    window.onload = function() {
+        var urlParams = new URLSearchParams(window.location.search);
+        var error = urlParams.get('error');
+        if (error) {
+            showError('userIdMsg', '* ' + decodeURIComponent(error));
+        }
+    };
+
     // 异步检查用户账号是否重复
     document.getElementById('userId').addEventListener('blur', function() {
         var userId = this.value.trim();
@@ -190,6 +202,10 @@
                 .then(data => {
                     if (!data.available) {
                         showError('userIdMsg', '*该用户账号已存在，请更换');
+                    } else {
+                        var element = document.getElementById('userIdMsg');
+                        element.textContent = element.getAttribute('data-default');
+                        element.style.color = '';
                     }
                 })
                 .catch(error => console.error('检查账号失败:', error));
